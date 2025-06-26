@@ -65,7 +65,7 @@ router.get('/count/:quizId', async (req, res) => {
 
   try {
     // ✅ Fetch user name from MongoDB
-    const userDetails = await User.find({ _id: { $in: activeUserIds } }).select('_id name');
+    const userDetails = await User.find({ _id: { $in: activeUserIds } }).select('_id username');
 
     res.json({
       count: userDetails.length,
