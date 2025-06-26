@@ -46,11 +46,14 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // ✅ Import Routes
 const quizRoutes = require('./Routes/quizRoutes');
 const liveRoutes = require('./Routes/live'); // ✅ use correct path
+const leaderboardRoutes = require('./Routes/leaderboard');
+
 
 
 // ✅ Use Routes
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/live', liveRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 // ✅ Start Server
 const PORT = process.env.PORT || 3000;
