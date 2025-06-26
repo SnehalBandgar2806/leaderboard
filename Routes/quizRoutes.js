@@ -31,3 +31,20 @@ router.post('/', async (req, res) => {
     res.status(500).json({ message: "Failed to save quiz", error: error.message });
   }
 });
+
+// ✅ Update quiz by quizId
+router.put('/:quizId', async (req, res) => {
+  try {
+    const updatedQuiz = await Quiz.findOneAndUpdate(
+      { quizId: req.params.quizId },
+      req.body,
+      { new: true }
+    );
+    if (!updatedQuiz) return res.status(404).json({ message: 'Quiz not found' });
+    res.json({ message: 'Quiz updated', data: updatedQuiz });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to update quiz', error: err.message });
+  }
+});
+
+module.exports = router;
