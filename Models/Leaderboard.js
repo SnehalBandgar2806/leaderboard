@@ -9,11 +9,7 @@ const leaderboardSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User', // optional, only if you use populate
-  },
-  name: {
-    type: String, // ✅ this must exist
-    required: true,
+    ref: 'User', // this enables populate to fetch username
   },
   score: {
     type: Number,
