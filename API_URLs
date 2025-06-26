@@ -1,0 +1,121 @@
+1. Get All Quizzes
+Method: GET
+URL: http://localhost:3000/api/quizzes
+
+2. Create/Add New Quiz
+Method: POST
+URL: http://localhost:3000/api/quizzes
+
+Sample JSON body:
+
+json
+Copy
+Edit
+{
+  "name": "General Knowledge Quiz",
+  "is_locked": false,
+  "is_upcoming": true,
+  "description": "A quiz covering various general knowledge topics.",
+  "category": "General",
+  "total_questions": 25,
+  "time_limit_minutes": 30
+}
+
+3. Get Total User Count
+Method: GET
+URL: http://localhost:3000/api/users/count
+
+4. Create/Add New User
+Method: POST
+URL: http://localhost:3000/api/users
+Sample JSON body:
+{
+  "name": "Tejaswini Pagare",
+  "email": "tejaswini@example.com",
+  "university": "PCCOE",
+  "academic_year": "Second Year",
+  "branch": "Computer Engineering"
+}
+
+
+QuizRegistrationAPI:
+1.get:http://localhost:3000/api/quiz-registrations/68519364e9492be05effca6c
+https://upcoming-contest.onrender.com/api/quiz-registrations/:quizId
+
+2.post:http://localhost:3000/api/quiz-registrations/register
+https://upcoming-contest.onrender.com/api/quiz-registrations/register
+
+{
+  "userId": "YOUR_USER_OBJECT_ID",
+  "quizId": "YOUR_QUIZ_OBJECT_ID"
+}
+
+
+User Model:
+1. Create Full User Profile (Register New User)
+    POST /api/users/register
+
+    https://upcoming-contest.onrender.com/api/users/register
+
+    {
+  "name": "Tejaswini Pagare",
+  "email": "tejaswini@example.com",
+  "universityName": "SPPU",
+  "currentSemester": 5,
+  "academicYear": "Third Year",
+  "branch": "Computer Engineering",
+  "username": "tejaswini_123",
+  "profileImage": "https://example.com/image.png"
+}
+
+ 2. Count Total Users
+GET /api/users/count
+
+  https://upcoming-contest.onrender.com/api/users/count
+
+3. Get All Users
+GET /api/users
+
+  https://upcoming-contest.onrender.com/api/users
+
+4. Get Single User Profile
+GET /api/users/:id
+
+  https://upcoming-contest.onrender.com/api/users/:id
+
+Example:
+GET /api/users/684f151ba692860e090c1d86
+
+ 5. Update User Profile
+PUT /api/users/:id
+
+  https://upcoming-contest.onrender.com/api/users/:id
+sample json
+{
+  "branch": "AI & DS",
+  "profileImage": "https://example.com/newimage.jpg"
+}
+
+6. Follow a User
+POST /api/users/:id/follow
+
+  https://upcoming-contest.onrender.com/api/users/:id/follow
+
+jsondata 
+
+{
+  "userId": "684f151ba692860e090c1d86"
+}
+
+Signup:
+post http://localhost:3000/api/users/auth/signup
+json data:
+{
+  "name": "Pruthvi Lahare",
+  "email": "pruthvi@example.com",
+  "password": "Pruthvi123",
+  "phone": "9876543210",
+  "address": "Flat 102, Green Valley, Nashik",
+  "wardNumber": "Ward-7",
+  "role": "user"
+}

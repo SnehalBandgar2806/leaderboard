@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Categories Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    .form-container, .categories-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    form {
+      display: grid;
+      gap: 15px;
+    }
+    input, textarea, select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .category-card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .category-image {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .category-info {
+      flex: 1;
+    }
+    .category-name {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    .category-desc {
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .image-preview {
+      max-width: 200px;
+      max-height: 200px;
+      margin-top: 10px;
+      display: none;
+    }
+    .required:after {
+      content: " *";
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Quiz Categories Manager</h1>
+
+  <div class="form-container">
+    <h2>Add New Category</h2>
+    <form id="categoryForm">
+      <div>
+        <label for="name" class="required">Category Name</label>
+        <input type="text" id="name" placeholder="e.g., Puzzle Quiz" required>
+      </div>
+      
+      <div>
+        <label for="description">Description</label>
+        <textarea id="description" rows="3" placeholder="Enter category description"></textarea>
+      </div>
+      
+      <div>
+        <label for="image">Category Image</label>
+        <input type="file" id="image" accept="image/*">
+        <img id="imagePreview" class="image-preview" alt="Image Preview">
+      </div>
+      
+      <button type="submit">Add Category</button>
+    </form>
+  </div>
+
+  <div class="categories-container">
+    <h2>Existing Categories</h2>
+    <div id="categoriesList"></div>
+  </div>
+
+  <script>
+    // Image preview functionality
+    document.getElementById('image').addEventListener('change', function(e) {
+      const preview = document.getElementById('imagePreview');
+      const file = e.target.files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+
+    // Form submission handler
+    document.getElementById('categoryForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData();
+      formData.append('name', document.getElementById('name').value);
+      formData.append('description', document.getElementById('description').value);
+      
+      const imageFile = document.getElementById('image').files[0];
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/api/categories', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          alert('Category added successfully!');
+          document.getElementById('categoryForm').reset();
+          document.getElementById('imagePreview').style.display = 'none';
+          loadCategories();
+        } else {
+          const errorData = await response.json();
+          alert(`Error: ${errorData.message}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to add category. Please try again.');
+      }
+    });
+
+    // Load and display categories
+    async function loadCategories() {
+      try {
+        const response = await fetch('http://localhost:3000/api/categories');
+        const categories = await response.json();
+        
+        const categoriesList = document.getElementById('categoriesList');
+        categoriesList.innerHTML = '';
+        
+        if (categories.length === 0) {
+          categoriesList.innerHTML = '<p>No categories found. Add one above!</p>';
+          return;
+        }
+        
+        categories.forEach(category => {
+          const card = document.createElement('div');
+          card.className = 'category-card';
+          
+          let imageHtml = '<div class="category-image" style="background: #eee; display: flex; align-items: center; justify-content: center;">No Image</div>';
+          if (category.imageUrl) {
+            imageHtml = `<img src="http://localhost:3000${category.imageUrl}" class="category-image" alt="${category.name}">`;
+          }
+          
+          card.innerHTML = `
+            ${imageHtml}
+            <div class="category-info">
+              <div class="category-name">${category.name}</div>
+              ${category.description ? `<div class="category-desc">${category.description}</div>` : ''}
+            </div>
+          `;
+          
+          categoriesList.appendChild(card);
+        });
+      } catch (error) {
+        console.error('Error loading categories:', error);
+        document.getElementById('categoriesList').innerHTML = '<p>Error loading categories. Please refresh the page.</p>';
+      }
+    }
+
+    // Initial load
+    loadCategories();
+  </script>
+</body>
+</html>
