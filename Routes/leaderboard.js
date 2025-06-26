@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const Leaderboard = require('../Models/Leaderboard');
-
-// ✅ POST: Submit score
+// POST: Submit score, time, and name
 router.post('/submit', async (req, res) => {
   const { quizId, userId, name, score, timeTaken } = req.body;
 
-  if (!quizId || !userId || !name || score == null || timeTaken == null) {
+  if (!quizId || !userId || score == null || timeTaken == null || !name) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
   try {
     await Leaderboard.findOneAndUpdate(
       { quizId, userId },
-      { name, score, timeTaken },
+      { score, timeTaken, name },  // ✅ Save name too
       { upsert: true, new: true }
     );
 
@@ -24,17 +23,16 @@ router.post('/submit', async (req, res) => {
   }
 });
 
-// ✅ GET: Leaderboard for a quiz
 router.get('/:quizId', async (req, res) => {
   const quizId = req.params.quizId;
 
   try {
-    const entries = await Leaderboard.find({ quizId })
-      .sort({ score: -1, timeTaken: 1 }); // high score first, low time better
+    const leaderboardEntries = await Leaderboard.find({ quizId })
+      .sort({ score: -1, timeTaken: 1 });
 
-    const formatted = entries.map((entry) => ({
+    const formatted = leaderboardEntries.map((entry) => ({
       userId: entry.userId,
-      name: entry.name,
+      name: entry.name, // ✅ Using directly saved name
       score: entry.score,
       timeTaken: entry.timeTaken,
     }));

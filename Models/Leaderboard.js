@@ -2,15 +2,17 @@ const mongoose = require('mongoose');
 
 const leaderboardSchema = new mongoose.Schema({
   quizId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: 'Quiz',
   },
   userId: {
-    type: String, // string ID
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: 'User',
   },
   name: {
-    type: String, // username stored directly
+    type: String, // save user's name at submission time
     required: true,
   },
   score: {
@@ -20,7 +22,10 @@ const leaderboardSchema = new mongoose.Schema({
   timeTaken: {
     type: Number,
     required: true,
-  },
+  }
 });
+
+// 🧠 Prevent duplicate submissions from same user on same quiz
+leaderboardSchema.index({ quizId: 1, userId: 1 }, { unique: true });
 
 module.exports = mongoose.model('Leaderboard', leaderboardSchema);
