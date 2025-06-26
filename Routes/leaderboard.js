@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Leaderboard = require('../models/Leaderboard');
+const Leaderboard = require('../Models/Leaderboard');
 
 // ✅ POST: Submit score
 router.post('/submit', async (req, res) => {
