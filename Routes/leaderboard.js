@@ -23,6 +23,7 @@ router.post('/submit', async (req, res) => {
   }
 });
 
+// ✅ GET: Get leaderboard for a quiz
 router.get('/:quizId', async (req, res) => {
   const quizId = req.params.quizId;
 
@@ -32,7 +33,7 @@ router.get('/:quizId', async (req, res) => {
 
     const formatted = leaderboardEntries.map((entry) => ({
       userId: entry.userId,
-      name: entry.name, // ✅ Using directly saved name
+      name: entry.name || 'Player',
       score: entry.score,
       timeTaken: entry.timeTaken,
     }));
@@ -43,5 +44,6 @@ router.get('/:quizId', async (req, res) => {
     res.status(500).json({ error: 'Server error while fetching leaderboard' });
   }
 });
+
 
 module.exports = router;
