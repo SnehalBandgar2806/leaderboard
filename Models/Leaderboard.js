@@ -1,12 +1,26 @@
-// Models/Leaderboard.js
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const leaderboardSchema = new Schema({
-  quizId: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  score: { type: Number, required: true },
-  timeTaken: { type: Number, required: true }, // seconds
+const leaderboardSchema = new mongoose.Schema({
+  quizId: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: String, // string ID
+    required: true,
+  },
+  name: {
+    type: String, // username stored directly
+    required: true,
+  },
+  score: {
+    type: Number,
+    required: true,
+  },
+  timeTaken: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Leaderboard', leaderboardSchema);
