@@ -1,57 +1,31 @@
 const mongoose = require('mongoose');
 
 const quizSchema = new mongoose.Schema({
-  quizId: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: () => new mongoose.Types.ObjectId()
-  },
   title: {
     type: String,
-    required: [true, "Quiz title is required"],
-    trim: true,
-    minlength: 3,
-    maxlength: 100
+    required: true,
   },
-  category: {
-    type: String,
-    trim: true,
-    default: ""
-  },
-  date: {
-    type: String, // or Date, if you want to enforce format
-    required: true
-  },
-  time: {
-    type: String,
-    required: true
-  },
-  maxTime: {
-    type: String,
-    required: true
-  },
-  maxQuestions: {
-    type: String,
-    required: true
-  },
-  spots: {
-    type: String,
-    required: true
-  },
-  prizePool: {
-    type: String,
-    required: true
-  },
-  entryFee: {
-    type: String,
-    required: true
-  },
-  shareText: {
-    type: String,
-    default: ""
+  category: String,
+  description: String,
+  date: String,       // Format: "2025-06-22"
+  time: String,       // Format: "14:00"
+  maxTime: String,    // e.g., "10 min"
+  maxQuestions: String, // e.g., "12"
+  spots: String,      // e.g., "100 Spots"
+  prizePool: String,  // e.g., "₹250"
+  entryFee: String,   // e.g., "₹50.00"
+  shareText: String,
+  is_locked: {
+    type: Boolean,
+    default: false,
   },
   is_upcoming: {
     type: Boolean,
-    default: false
+    default: true,
+  },
+  quizId: {
+    type: String,
+    unique: true,
   }
 }, { timestamps: true });
 
