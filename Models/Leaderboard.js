@@ -1,26 +1,11 @@
 const mongoose = require('mongoose');
 
 const leaderboardSchema = new mongoose.Schema({
-  quizId: {
-    type: String,
-    required: true,
-  },
-  userId: {
-    type: String, // keep as String, not ObjectId
-    required: true,
-  },
-  name: {
-    type: String, // 🟢 ensure name is stored directly
-    required: true,
-  },
-  score: {
-    type: Number,
-    required: true,
-  },
-  timeTaken: {
-    type: Number,
-    required: true,
-  },
-});
+  quizId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+  name: { type: String, required: true }, // ✅ Include this
+  score: { type: Number, required: true },
+  timeTaken: { type: Number, required: true },
+}, { timestamps: true });
 
 module.exports = mongoose.model('Leaderboard', leaderboardSchema);
