@@ -71,7 +71,7 @@ router.get('/count/:quizId', async (req, res) => {
       count: userDetails.length,
       users: userDetails.map(user => ({
         userId: user._id,
-        name: user.name,
+        name: user.username,
       })),
     });
   } catch (error) {
