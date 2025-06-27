@@ -49,4 +49,21 @@ router.get('/:quizId', async (req, res) => {
   }
 });
 
+// DELETE /api/leaderboard/:quizId/:userId
+router.delete('/:quizId/:userId', async (req, res) => {
+  const { quizId, userId } = req.params;
+  try {
+    const result = await Leaderboard.deleteOne({ quizId, userId });
+    if (result.deletedCount > 0) {
+      res.json({ success: true, message: 'User removed from leaderboard.' });
+    } else {
+      res.status(404).json({ success: false, message: 'Entry not found.' });
+    }
+  } catch (error) {
+    console.error('Error deleting leaderboard entry:', error);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+
 module.exports = router;
