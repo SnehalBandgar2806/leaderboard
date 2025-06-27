@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Leaderboard = require('../Models/Leaderboard');
 const User = require('../Models/Users'); // ✅ import user model
+const mongoose = require('mongoose');
 
 // Routes/leaderboard.js
 
@@ -50,14 +51,15 @@ router.get('/:quizId', async (req, res) => {
 });
 
 // DELETE /api/leaderboard/:quizId/:userId
-
 router.delete('/:quizId/:userId', async (req, res) => {
   const { quizId, userId } = req.params;
+
   try {
     const result = await Leaderboard.deleteOne({
-      quizId,
+      quizId: quizId,
       userId: new mongoose.Types.ObjectId(userId)
     });
+
     if (result.deletedCount > 0) {
       res.json({ success: true, message: 'User removed from leaderboard.' });
     } else {
@@ -68,6 +70,11 @@ router.delete('/:quizId/:userId', async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
+
+router.get('/test', (req, res) => {
+  res.send('✅ Test route working');
+});
+
 
 
 module.exports = router;
