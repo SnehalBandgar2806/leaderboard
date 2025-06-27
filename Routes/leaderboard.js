@@ -50,10 +50,14 @@ router.get('/:quizId', async (req, res) => {
 });
 
 // DELETE /api/leaderboard/:quizId/:userId
+
 router.delete('/:quizId/:userId', async (req, res) => {
   const { quizId, userId } = req.params;
   try {
-    const result = await Leaderboard.deleteOne({ quizId, userId });
+    const result = await Leaderboard.deleteOne({
+      quizId,
+      userId: new mongoose.Types.ObjectId(userId)
+    });
     if (result.deletedCount > 0) {
       res.json({ success: true, message: 'User removed from leaderboard.' });
     } else {
